@@ -1,0 +1,550 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<h2>User Login</h2>
+
+<form method="POST">
+
+    <input
+    type="email"
+    name="email"
+    placeholder="Email"
+    required>
+
+    <br><br>
+
+    <input
+    type="password"
+    name="password"
+    placeholder="Password"
+    required>
+
+    <br><br>
+
+    <button type="submit">
+        Login
+    </button>
+
+</form>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ShopEasy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            color: #172033;
+            background:
+                radial-gradient(circle at 15% 15%, #dce8ff, transparent 35%),
+                radial-gradient(circle at 90% 85%, #e7ddff, transparent 35%),
+                #f5f7ff;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 960px;
+            min-height: 570px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 75px rgba(38, 57, 100, .14);
+            animation: fadeIn .55s ease;
+        }
+
+        .welcome {
+            padding: 42px;
+            color: white;
+            background: linear-gradient(145deg, #1769ff, #4937ca 70%, #7138cf);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome::before {
+            content: "";
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border: 55px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+            right: -150px;
+            top: 120px;
+        }
+
+        .brand, .welcome-content, .welcome-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 47px;
+            height: 47px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.17);
+            font-size: 25px;
+        }
+
+        .welcome-content { margin: 45px 0; }
+
+        .tag {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 25px;
+            background: rgba(255,255,255,.15);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            margin-bottom: 23px;
+        }
+
+        .welcome h1 {
+            font-size: clamp(32px, 4vw, 43px);
+            line-height: 1.18;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .welcome p {
+            color: #e2eaff;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .benefit {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+
+        .benefit span {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,.15);
+        }
+
+        .welcome-footer {
+            color: #e1e8ff;
+            font-size: 12px;
+        }
+
+        .form-side {
+            padding: 45px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .mobile-brand {
+            display: none;
+            color: #1769ff;
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .login-icon {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 17px;
+            background: #edf3ff;
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        .form-side h2 {
+            font-size: 31px;
+            letter-spacing: -.7px;
+            margin-bottom: 9px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #7b8496;
+            margin-bottom: 30px;
+        }
+
+        .field { margin-bottom: 21px; }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+            color: #344054;
+        }
+
+        .input-wrap { position: relative; }
+
+        .input-wrap input {
+            width: 100%;
+            height: 51px;
+            padding: 0 45px 0 15px;
+            border: 1px solid #dce3ef;
+            border-radius: 11px;
+            background: #fbfcff;
+            color: #172033;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: #3977ff;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(57,119,255,.11);
+        }
+
+        .input-wrap input::placeholder { color: #a0a9b9; }
+
+        .input-symbol {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #8590a4;
+            pointer-events: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 5px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin: 3px 0 25px;
+            font-size: 12px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #657086;
+            cursor: pointer;
+        }
+
+        .remember input { accent-color: #1769ff; }
+
+        .form-options a, .register a {
+            color: #1769ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-options a:hover, .register a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 52px;
+            border: none;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(100deg, #1769ff, #4938d1);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(23,105,255,.2);
+            transition: .2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(23,105,255,.28);
+        }
+
+        .login-button:disabled {
+            opacity: .7;
+            cursor: wait;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .message.error {
+            display: block;
+            color: #b42335;
+            background: #fff0f1;
+            border: 1px solid #ffd5da;
+        }
+
+        .register {
+            text-align: center;
+            font-size: 13px;
+            color: #737e91;
+            margin-top: 25px;
+        }
+
+        .security {
+            text-align: center;
+            color: #929bad;
+            font-size: 12px;
+            margin-top: 25px;
+        }
+
+        .back-link {
+            text-align: center;
+            display: block;
+            margin-top: 19px;
+            font-size: 13px;
+            color: #596579;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #1769ff; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 720px) {
+            .login-card {
+                max-width: 460px;
+                min-height: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .welcome { display: none; }
+            .form-side { padding: 35px 26px; }
+
+            .mobile-brand {
+                display: block;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-card">
+
+    <section class="welcome">
+        <div class="brand">
+            <div class="brand-icon">🛍</div>
+            ShopEasy
+        </div>
+
+        <div class="welcome-content">
+            <span class="tag">YOUR SHOPPING DESTINATION</span>
+            <h1>Shopping made simple. Life made easier.</h1>
+            <p>
+                Discover your favorite products, enjoy a smooth shopping
+                experience, and keep everything you love in one place.
+            </p>
+
+            <div class="benefit">
+                <span>🛒</span>
+                <div>Easy and convenient shopping</div>
+            </div>
+
+            <div class="benefit">
+                <span>🔒</span>
+                <div>Secure account access</div>
+            </div>
+        </div>
+
+        <div class="welcome-footer">© 2026 ShopEasy. All rights reserved.</div>
+    </section>
+
+    <section class="form-side">
+        <div class="mobile-brand">🛍 ShopEasy</div>
+
+        <div class="login-icon">👋</div>
+        <h2>Welcome back!</h2>
+        <p class="subtitle">Sign in to your account to continue shopping.</p>
+
+        <div id="formMessage" class="message" role="alert"></div>
+
+        <form id="loginForm" action="/login" method="POST">
+            <div class="field">
+                <label for="email">Email Address</label>
+                <div class="input-wrap">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                        autofocus
+                    >
+                    <span class="input-symbol">✉</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="password-toggle"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >👁</button>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember">
+                    <input type="checkbox" id="rememberEmail">
+                    Remember email
+                </label>
+                <a href="/forgot_password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-button" id="loginButton">
+                Login to Your Account →
+            </button>
+        </form>
+
+        <div class="register">
+            Don't have an account? <a href="/register">Create account</a>
+        </div>
+
+        <div class="security">🔒 Your account details are protected</div>
+
+        <a href="/" class="back-link">← Back to ShopEasy Store</a>
+    </section>
+</div>
+
+<script>
+    const password = document.getElementById("password");
+    const toggle = document.getElementById("togglePassword");
+    const form = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const remember = document.getElementById("rememberEmail");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("formMessage");
+
+    // Password visibility
+    toggle.addEventListener("click", function () {
+        const show = password.type === "password";
+        password.type = show ? "text" : "password";
+        toggle.textContent = show ? "🙈" : "👁";
+        toggle.setAttribute("aria-pressed", String(show));
+        toggle.setAttribute(
+            "aria-label",
+            show ? "Hide password" : "Show password"
+        );
+    });
+
+    // Remember email only; never save the password.
+    try {
+        const savedEmail = localStorage.getItem("shopeasy_login_email");
+
+        if (savedEmail) {
+            email.value = savedEmail;
+            remember.checked = true;
+        }
+    } catch (error) {
+        // Storage is optional.
+    }
+
+    form.addEventListener("submit", function (event) {
+        message.className = "message";
+        message.textContent = "";
+
+        if (!email.value.trim() || !password.value) {
+            event.preventDefault();
+            message.className = "message error";
+            message.textContent = "Please enter your email and password.";
+            return;
+        }
+
+        try {
+            if (remember.checked) {
+                localStorage.setItem(
+                    "shopeasy_login_email",
+                    email.value.trim()
+                );
+            } else {
+                localStorage.removeItem("shopeasy_login_email");
+            }
+        } catch (error) {
+            // Storage is optional.
+        }
+
+        button.disabled = true;
+        button.textContent = "Signing in...";
+    });
+</script>
+</body>
+</html>

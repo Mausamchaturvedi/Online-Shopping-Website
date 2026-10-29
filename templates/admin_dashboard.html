@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:#f4f6f9;
+            padding:30px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:30px;
+            color:#333;
+        }
+
+        .container{
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
+            gap:25px;
+        }
+
+        .card{
+            width:260px;
+            background:white;
+            border-radius:12px;
+            padding:25px;
+            text-align:center;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        .icon{
+            font-size:45px;
+            margin-bottom:10px;
+        }
+
+        .title{
+            font-size:20px;
+            color:#555;
+            margin-bottom:10px;
+        }
+
+        .number{
+            font-size:32px;
+            font-weight:bold;
+            color:#2874f0;
+        }
+
+        .users{
+            border-top:5px solid #2874f0;
+        }
+
+        .products{
+            border-top:5px solid #28a745;
+        }
+
+        .orders{
+            border-top:5px solid #ff9800;
+        }
+
+        .revenue{
+            border-top:5px solid #e91e63;
+        }
+
+        .today{
+            border-top:5px solid #00bcd4;
+        }
+
+        .monthly{
+            border-top:5px solid #9c27b0;
+        }
+
+        .top-product{
+            margin-top:40px;
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            text-align:center;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .top-product h2{
+            color:#28a745;
+            margin-bottom:15px;
+        }
+
+        .top-product h3{
+            font-size:28px;
+            margin-bottom:10px;
+        }
+
+        .sold{
+            font-size:22px;
+            color:#2874f0;
+            font-weight:bold;
+        }
+
+        .section-title{
+            text-align:center;
+            margin-top:50px;
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        table{
+            width:100%;
+            background:white;
+            border-collapse:collapse;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        th{
+            background:#2874f0;
+            color:white;
+        }
+
+        th, td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
+
+        tr:nth-child(even){
+            background:#f9f9f9;
+        }
+
+        .low-stock{
+            margin-top:40px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .low-stock h2{
+            color:red;
+            margin-bottom:15px;
+        }
+
+        .stock-warning{
+            color:red;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div class="container">
+
+    <div class="card users">
+        <div class="icon">👤</div>
+        <div class="title">Total Users</div>
+        <div class="number">{{ total_users }}</div>
+    </div>
+
+    <div class="card products">
+        <div class="icon">📦</div>
+        <div class="title">Total Products</div>
+        <div class="number">{{ total_products }}</div>
+    </div>
+
+    <div class="card orders">
+        <div class="icon">🛒</div>
+        <div class="title">Total Orders</div>
+        <div class="number">{{ total_orders }}</div>
+    </div>
+
+    <div class="card revenue">
+        <div class="icon">💰</div>
+        <div class="title">Total Revenue</div>
+        <div class="number">₹{{ total_revenue }}</div>
+    </div>
+
+    <div class="card today">
+        <div class="icon">📅</div>
+        <div class="title">Today's Revenue</div>
+        <div class="number">₹{{ today_revenue }}</div>
+    </div>
+
+    <div class="card monthly">
+        <div class="icon">📈</div>
+        <div class="title">Monthly Revenue</div>
+        <div class="number">₹{{ month_revenue }}</div>
+    </div>
+
+</div>
+
+<div class="top-product">
+
+    <h2>🏆 Top Selling Product</h2>
+
+    {% if top_product %}
+
+        <h3>{{ top_product[0] }}</h3>
+
+        <div class="sold">
+            Sold: {{ top_product[1] }} Units
+        </div>
+
+    {% else %}
+
+        <p>No sales yet.</p>
+
+    {% endif %}
+
+</div>
+
+<h2 class="section-title">
+    Recent Orders
+</h2>
+
+<table>
+
+<tr>
+    <th>Order ID</th>
+    <th>Customer</th>
+    <th>Total Amount</th>
+    <th>Status</th>
+</tr>
+
+{% for order in recent_orders %}
+
+<tr>
+    <td>{{ order[0] }}</td>
+    <td>{{ order[1] }}</td>
+    <td>₹{{ order[2] }}</td>
+    <td>{{ order[3] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="low-stock">
+
+    <h2>⚠ Low Stock Products</h2>
+
+    {% if low_stock_products %}
+
+    <table>
+
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Stock Left</th>
+        </tr>
+
+        {% for product in low_stock_products %}
+
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td class="stock-warning">{{ product[2] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No low stock products.</p>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

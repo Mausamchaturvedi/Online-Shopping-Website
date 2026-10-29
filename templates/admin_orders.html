@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Orders</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            padding:20px;
+            background:#f5f5f5;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
+
+        th{
+            background:#2874f0;
+            color:white;
+        }
+
+        tr:nth-child(even){
+            background:#f9f9f9;
+        }
+
+        .status-pending{
+            color:orange;
+            font-weight:bold;
+        }
+
+        .status-processing{
+            color:#ff6600;
+            font-weight:bold;
+        }
+
+        .status-shipped{
+            color:blue;
+            font-weight:bold;
+        }
+
+        .status-delivered{
+            color:green;
+            font-weight:bold;
+        }
+
+        a{
+            text-decoration:none;
+            padding:6px 12px;
+            border-radius:5px;
+            color:white;
+            margin:2px;
+            display:inline-block;
+        }
+
+        .view{
+            background:#6f42c1;
+        }
+
+        .processing{
+            background:orange;
+        }
+
+        .shipped{
+            background:#2874f0;
+        }
+
+        .delivered{
+            background:green;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>All Customer Orders ({{ orders|length }})</h1>
+
+<table>
+
+<tr>
+    <th>Order ID</th>
+    <th>Customer Name</th>
+    <th>Email</th>
+    <th>Total Amount</th>
+    <th>Order Date</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+
+{% for order in orders %}
+
+<tr>
+
+    <td>{{ order[0] }}</td>
+
+    <td>{{ order[1] }}</td>
+
+    <td>{{ order[2] }}</td>
+
+    <td>₹{{ order[3] }}</td>
+
+    <td>{{ order[4] }}</td>
+
+    <td>
+
+        {% if order[5] == 'Pending' %}
+            <span class="status-pending">Pending</span>
+
+        {% elif order[5] == 'Processing' %}
+            <span class="status-processing">Processing</span>
+
+        {% elif order[5] == 'Shipped' %}
+            <span class="status-shipped">Shipped</span>
+
+        {% elif order[5] == 'Delivered' %}
+            <span class="status-delivered">Delivered</span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        <a
+        class="view"
+        href="/admin/order/{{ order[0] }}">
+            View Details
+        </a>
+
+        <a
+        class="processing"
+        href="/update_order_status/{{ order[0] }}/Processing">
+            Processing
+        </a>
+
+        <a
+        class="shipped"
+        href="/update_order_status/{{ order[0] }}/Shipped">
+            Shipped
+        </a>
+
+        <a
+        class="delivered"
+        href="/update_order_status/{{ order[0] }}/Delivered">
+            Delivered
+        </a>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy | Products</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background: #2874f0;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .page {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 28px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .search-box form {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-box input,
+        .search-box select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            min-width: 180px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .search-btn {
+            background: #2874f0;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 7px;
+        }
+
+        .search-btn:hover {
+            background: #1558c0;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e4e7ec;
+            border-radius: 12px;
+            padding: 18px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px #00000012;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            font-size: 19px;
+        }
+
+        .product-card h3 a {
+            color: #174ea6;
+            text-decoration: none;
+        }
+
+        .product-card h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .description {
+            color: #555;
+            line-height: 1.5;
+            min-height: 60px;
+        }
+
+        .price {
+            color: #16823b;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .stock {
+            color: #555;
+            margin: 12px 0;
+        }
+
+        .cart-btn,
+        .out-btn {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .cart-btn {
+            background: #28a745;
+        }
+
+        .cart-btn:hover {
+            background: #218838;
+        }
+
+        .out-btn {
+            background: #dc3545;
+            cursor: not-allowed;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 35px;
+            color: #666;
+        }
+
+        @media (max-width: 850px) {
+            .product-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                justify-content: center;
+            }
+
+            .search-box input,
+            .search-box select,
+            .search-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>ShopEasy</h2>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="/cart">Cart</a>
+        <a href="/orders">My Orders</a>
+        <a href="/login">Login</a>
+    </nav>
+</header>
+
+<main class="page">
+
+    <h1>Available Products</h1>
+
+    <section class="search-box">
+        <form method="GET" action="{{ url_for('products') }}">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search products..."
+                value="{{ request.args.get('search', '') }}"
+            >
+
+            <select name="category">
+                <option value="">All Categories</option>
+
+                {% for category in categories %}
+                    <option
+                        value="{{ category[0] }}"
+                        {% if request.args.get('category', '') == category[0]|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ category[1] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="search-btn">
+                Search
+            </button>
+
+        </form>
+    </section>
+
+    <section class="product-container">
+
+        {% for product in products %}
+
+            {% set image_value = (product[4] or '')|string|trim %}
+
+            <article class="product-card">
+
+                {% if image_value.startswith('https://') or image_value.startswith('http://') %}
+
+                    <img
+                        class="product-image"
+                        src="{{ image_value }}"
+                        alt="{{ product[1] }}"
+                        loading="lazy"
+                    >
+
+                {% elif image_value %}
+
+                    <img
+                        class="product-image"
+                        src="{{ url_for('static', filename='images/' + image_value) }}"
+                        alt="{{ product[1] }}"
+                        loading="lazy"
+                    >
+
+                {% else %}
+
+                    <img
+                        class="product-image"
+                        src="{{ url_for('static', filename='images/watch.jpg') }}"
+                        alt="Product image unavailable"
+                        loading="lazy"
+                    >
+
+                {% endif %}
+
+                <h3>
+                    <a href="/product/{{ product[0] }}">
+                        {{ product[1] }}
+                    </a>
+                </h3>
+
+                <p class="description">
+                    {{ product[2] or 'Explore this product at ShopEasy.' }}
+                </p>
+
+                <p class="price">
+                    ₹{{ "%.2f"|format(product[3]|float) }}
+                </p>
+
+                <p class="stock">
+                    Stock: {{ product[5] }}
+                </p>
+
+                {% if product[5]|int > 0 %}
+
+                    <a
+                        class="cart-btn"
+                        href="/add_to_cart/{{ product[0] }}"
+                    >
+                        Add to Cart
+                    </a>
+
+                {% else %}
+
+                    <button class="out-btn" disabled>
+                        Out of Stock
+                    </button>
+
+                {% endif %}
+
+            </article>
+
+        {% else %}
+
+            <div class="empty-message">
+                <h2>No Products Found</h2>
+                <p>Try another search or select a different category.</p>
+            </div>
+
+        {% endfor %}
+
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2026 ShopEasy. All rights reserved.
+</footer>
+
+</body>
+</html>

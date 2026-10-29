@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Products</title>
+</head>
+<body>
+
+<h1>Manage Products</h1>
+
+<a href="/add_product">
+<button>Add New Product</button>
+</a>
+
+<hr>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Stock</th>
+    <th>Action</th>
+</tr>
+
+{% for product in products %}
+
+<tr>
+
+<td>{{ product[0] }}</td>
+<td>{{ product[1] }}</td>
+<td>₹{{ product[3] }}</td>
+<td>{{ product[5] }}</td>
+
+<td>
+
+<a href="/edit_product/{{ product[0] }}">
+<button>Edit</button>
+</a>
+
+<a href="/delete_product/{{ product[0] }}">
+<button>Delete</button>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

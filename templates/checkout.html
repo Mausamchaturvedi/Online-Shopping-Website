@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy Checkout</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px 15px;
+        }
+        .checkout {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px #00000012;
+        }
+        h1 { color: #222; }
+        .option {
+            display: block;
+            padding: 15px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            border: 0;
+            border-radius: 7px;
+            background: #1769ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:disabled { opacity: .6; cursor: wait; }
+        #message { color: #b00020; margin-top: 12px; }
+    </style>
+</head>
+<body>
+<div class="checkout">
+    <h1>Checkout</h1>
+    <h2>Total: ₹{{ "%.2f"|format(total) }}</h2>
+
+    <form id="checkout-form" method="POST" action="/checkout">
+        <label class="option">
+            <input type="radio" name="payment_method" value="ONLINE" checked>
+            UPI / Debit Card / Credit Card
+            <p>Pay securely using Razorpay.</p>
+        </label>
+
+        <label class="option">
+            <input type="radio" name="payment_method" value="COD">
+            Cash on Delivery
+            <p>Pay when your order arrives.</p>
+        </label>
+
+        <button id="pay-button" type="submit">Continue to Payment</button>
+        <div id="message" role="alert"></div>
+    </form>
+</div>
+
+<script>
+const form = document.getElementById('checkout-form');
+const button = document.getElementById('pay-button');
+const message = document.getElementById('message');
+
+form.addEventListener('submit', async function(event) {
+    const selected = document.querySelector(
+        'input[name="payment_method"]:checked'
+    ).value;
+
+    if (selected === 'COD') {
+        button.disabled = true;
+        button.textContent = 'Placing order...';
+        return;
+    }
+
+    event.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Starting secure payment...';
+    message.textContent = '';
+
+    try {
+        const response = await fetch('/payment/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({})
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Unable to start payment.');
+        }
+
+        const options = {
+            key: data.key_id,
+            amount: data.amount,
+            currency: data.currency,
+            name: data.name,
+            description: data.description,
+            order_id: data.razorpay_order_id,
+
+            handler: async function(paymentResponse) {
+                message.textContent = 'Verifying payment...';
+
+                try {
+                    const verifyResponse = await fetch('/payment/verify', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            ...paymentResponse,
+                            local_order_id: data.local_order_id
+                        })
+                    });
+
+                    const result = await verifyResponse.json();
+
+                    if (!verifyResponse.ok || !result.success) {
+                        throw new Error(
+                            result.error || 'Payment verification failed.'
+                        );
+                    }
+
+                    window.location.href = result.redirect_url;
+                } catch (error) {
+                    message.textContent = error.message;
+                    button.disabled = false;
+                    button.textContent = 'Retry Payment';
+                }
+            },
+
+            modal: {
+                ondismiss: function() {
+                    button.disabled = false;
+                    button.textContent = 'Continue to Payment';
+                }
+            },
+
+            theme: {color: '#1769ff'}
+        };
+
+        const razorpay = new Razorpay(options);
+
+        razorpay.on('payment.failed', function(response) {
+            message.textContent =
+                response.error.description || 'Payment failed. Please retry.';
+            button.disabled = false;
+            button.textContent = 'Retry Payment';
+        });
+
+        razorpay.open();
+
+    } catch (error) {
+        message.textContent = error.message;
+        button.disabled = false;
+        button.textContent = 'Continue to Payment';
+    }
+});
+</script>
+</body>
+</html>

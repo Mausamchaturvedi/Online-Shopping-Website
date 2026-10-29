@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Product</title>
+</head>
+<body>
+
+<h1>Add Product</h1>
+
+<form method="POST">
+
+<input type="text"
+name="name"
+placeholder="Product Name"
+required>
+
+<br><br>
+
+<textarea
+name="description"
+placeholder="Description"
+required>
+</textarea>
+
+<br><br>
+
+<input type="number"
+name="price"
+placeholder="Price"
+required>
+
+<br><br>
+
+<input type="text"
+name="image"
+placeholder="Image Name">
+
+<br><br>
+
+<input type="number"
+name="stock"
+placeholder="Stock"
+required>
+
+<br><br>
+<br><br>
+
+<label>Category</label>
+
+<select name="category_id" required>
+
+{% for category in categories %}
+
+<option value="{{ category[0] }}">
+    {{ category[1] }}
+</option>
+
+{% endfor %}
+
+</select>
+
+<br><br>
+<button type="submit">
+Save Product
+</button>
+
+</form>
+
+</body>
+</html>

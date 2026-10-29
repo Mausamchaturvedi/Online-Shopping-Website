@@ -1,0 +1,453 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<title>Cart</title>
+</head>
+<body>
+
+<h1>Shopping Cart</h1>
+
+{% for item in cart_items %}
+
+<div style="border:1px solid black;
+padding:10px;
+margin:10px;">
+
+<h3>{{ item[0] }}</h3>
+
+<p>₹{{ item[1] }}</p>
+
+</div>
+<br>
+
+<a href="/checkout">
+
+<button>
+Checkout
+</button>
+
+</a>
+{% endfor %}
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | ShopEasy</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #172033;
+            background: #f4f7fb;
+        }
+
+        header {
+            background: #fff;
+            padding: 20px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        .logo {
+            color: #1769ff;
+            font-size: 27px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        header nav {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        header nav a {
+            color: #364152;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        header nav a:hover { color: #1769ff; }
+
+        .container {
+            max-width: 1200px;
+            padding: 35px 20px 60px;
+            margin: auto;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-heading h1 {
+            font-size: clamp(28px, 4vw, 38px);
+            margin: 0 0 8px;
+        }
+
+        .page-heading p { color: #6b7280; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .cart-panel, .summary {
+            background: white;
+            border: 1px solid #e6ebf2;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #16284a08;
+        }
+
+        .cart-panel { padding: 22px; }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .panel-heading h2 { font-size: 20px; margin: 0; }
+
+        .count {
+            background: #eaf1ff;
+            color: #1769ff;
+            padding: 6px 11px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .product {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 20px;
+            padding: 24px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .product:last-child { border-bottom: 0; }
+
+        .product-image {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            padding: 8px;
+            background: #f7f9fc;
+            border-radius: 12px;
+        }
+
+        .product-info h3 {
+            margin: 2px 0 8px;
+            font-size: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .unit-price {
+            color: #687386;
+            font-size: 14px;
+        }
+
+        .product-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 17px;
+        }
+
+        .quantity-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity-form input {
+            width: 65px;
+            padding: 9px 5px;
+            border: 1px solid #d8dfeb;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .small-button {
+            padding: 9px 12px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .update-button {
+            color: #1769ff;
+            background: #eaf1ff;
+        }
+
+        .remove-button {
+            color: #d92d42;
+            background: #fff0f1;
+        }
+
+        .line-total {
+            font-size: 19px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .summary {
+            padding: 24px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary h2 { margin-top: 0; font-size: 21px; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 18px 0;
+            color: #596579;
+        }
+
+        .summary-row strong { color: #172033; }
+
+        .grand-total {
+            border-top: 1px solid #e8edf5;
+            padding-top: 20px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .checkout-button, .continue-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .checkout-button {
+            border: 0;
+            background: #1769ff;
+            color: white;
+            margin: 22px 0 12px;
+        }
+
+        .checkout-button:hover { background: #0754df; }
+
+        .continue-button {
+            border: 1px solid #dbe2ed;
+            color: #364152;
+            background: white;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            color: #758094;
+            margin-top: 18px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-icon { font-size: 55px; }
+
+        .empty h2 { margin-bottom: 8px; }
+
+        .empty p { color: #6b7280; margin-bottom: 24px; }
+
+        .empty a {
+            display: inline-block;
+            background: #1769ff;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        @media (max-width: 850px) {
+            .layout { grid-template-columns: 1fr; }
+            .summary { position: static; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 17px 5%; }
+            header nav { gap: 12px; font-size: 13px; }
+            .container { padding: 25px 12px; }
+            .cart-panel { padding: 15px; }
+            .product {
+                grid-template-columns: 78px minmax(0, 1fr);
+                gap: 12px;
+            }
+            .product-image { width: 78px; height: 85px; }
+            .product-bottom { align-items: flex-start; }
+            .line-total { font-size: 17px; }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <a class="logo" href="/">ShopEasy</a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/products">Products</a>
+        <a href="/cart">My Cart</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="page-heading">
+        <h1>Your Shopping Cart</h1>
+        <p>Review your items before placing your order.</p>
+    </div>
+
+    {% if cart_items %}
+    <div class="layout">
+        <section class="cart-panel">
+            <div class="panel-heading">
+                <h2>Cart Items</h2>
+                <span class="count">{{ cart_items|length }} item(s)</span>
+            </div>
+
+            {% for item in cart_items %}
+            <article class="product">
+                {% set image_name = item['image'] or '' %}
+                {% if image_name.startswith('http://') or image_name.startswith('https://') %}
+                    {% set image_url = image_name %}
+                {% elif image_name %}
+                    {% set image_url = url_for('static', filename='images/' ~ image_name) %}
+                {% else %}
+                    {% set image_url = '' %}
+                {% endif %}
+
+                <img
+                    class="product-image"
+                    src="{{ image_url }}"
+                    alt="{{ item['name'] }}"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <div class="product-image image-fallback"
+                     style="display:none; align-items:center; justify-content:center;">
+                    📦
+                </div>
+
+                <div class="product-info">
+                    <h3>{{ item['name'] }}</h3>
+                    <div class="unit-price">
+                        ₹{{ "%.2f"|format(item['price']|float) }} each
+                    </div>
+
+                    <div class="product-bottom">
+                        <form class="quantity-form" action="/cart/update" method="POST">
+                            <input type="hidden" name="product_id"
+                                   value="{{ item['product_id'] }}">
+                            <label>
+                                <span class="unit-price">Qty</span>
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{ item['quantity'] or 1 }}"
+                                    min="1"
+                                    max="{{ item['stock'] if item['stock'] is not none else 999 }}"
+                                    required
+                                    aria-label="Quantity for {{ item['name'] }}"
+                                >
+                            </label>
+                            <button class="small-button update-button" type="submit">
+                                Update
+                            </button>
+                        </form>
+
+                        <div class="line-total">
+                            ₹{{ "%.2f"|format(item['price']|float * (item['quantity'] or 1)|int) }}
+                        </div>
+                    </div>
+
+                    <form action="/cart/remove/{{ item['product_id'] }}"
+                          method="POST"
+                          onsubmit="return confirm('Remove this product from your cart?');"
+                          style="margin-top:12px;">
+                        <button class="small-button remove-button" type="submit">
+                            Remove item
+                        </button>
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <aside class="summary">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Items</span>
+                <strong>{{ cart_items|length }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>₹{{ "%.2f"|format(total) }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <strong>Free</strong>
+            </div>
+
+            <div class="summary-row grand-total">
+                <span>Total</span>
+                <span>₹{{ "%.2f"|format(total) }}</span>
+            </div>
+
+            <a href="/checkout" class="checkout-button">
+                Proceed to Checkout →
+            </a>
+
+            <a href="/products" class="continue-button">
+                Continue Shopping
+            </a>
+
+            <div class="secure-note">
+                🔒 Secure checkout · Payment options available
+            </div>
+        </aside>
+    </div>
+
+    {% else %}
+    <section class="cart-panel empty">
+        <div class="empty-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <a href="/products">Explore Products</a>
+    </section>
+    {% endif %}
+</main>
+</body>
+</html>

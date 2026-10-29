@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Product</title>
+</head>
+<body>
+
+<h1>Edit Product</h1>
+
+<form method="POST">
+
+<input
+type="text"
+name="name"
+value="{{ product[1] }}"
+required>
+
+<br><br>
+
+<textarea
+name="description"
+required>{{ product[2] }}</textarea>
+
+<br><br>
+
+<input
+type="number"
+name="price"
+value="{{ product[3] }}"
+required>
+
+<br><br>
+
+<input
+type="text"
+name="image"
+value="{{ product[4] }}">
+
+<br><br>
+
+<input
+type="number"
+name="stock"
+value="{{ product[5] }}"
+required>
+
+<br><br>
+
+<button type="submit">
+Update Product
+</button>
+
+</form>
+
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+</head>
+<body>
+
+<h1>Admin Login</h1>
+
+<form method="POST">
+
+<input type="text"
+name="username"
+placeholder="Username"
+required>
+
+<br><br>
+
+<input type="password"
+name="password"
+placeholder="Password"
+required>
+
+<br><br>
+
+<button type="submit">
+Login
+</button>
+
+</form>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | ShopEasy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #172033;
+            background:
+                radial-gradient(ellipse at top left, #dce8ff 0%, transparent 45%),
+                linear-gradient(135deg, #eef3ff, #f8faff 55%, #e9efff);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 980px;
+            min-height: 570px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(29, 54, 105, 0.15);
+            animation: appear 0.5s ease;
+        }
+
+        .welcome-panel {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 42px;
+            color: white;
+            background: linear-gradient(145deg, #155eef, #4938c8 65%, #722ed1);
+        }
+
+        .welcome-panel::before,
+        .welcome-panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .welcome-panel::before {
+            width: 300px;
+            height: 300px;
+            right: -130px;
+            top: 80px;
+        }
+
+        .welcome-panel::after {
+            width: 230px;
+            height: 230px;
+            left: -100px;
+            bottom: -80px;
+        }
+
+        .brand, .welcome-content, .welcome-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.25);
+            font-size: 25px;
+        }
+
+        .welcome-content { margin: 45px 0; }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.14);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            margin-bottom: 23px;
+        }
+
+        .welcome-content h1 {
+            font-size: clamp(32px, 4vw, 43px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-content p {
+            color: #e1e8ff;
+            font-size: 15px;
+            line-height: 1.8;
+            max-width: 340px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #f0f3ff;
+        }
+
+        .feature-icon {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+
+        .welcome-footer {
+            font-size: 12px;
+            color: #dce5ff;
+        }
+
+        .form-panel {
+            padding: 48px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .mobile-brand { display: none; }
+
+        .admin-icon {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 17px;
+            background: #edf3ff;
+            color: #155eef;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .form-panel h2 {
+            font-size: 30px;
+            letter-spacing: -0.8px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7a8497;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .field { margin-bottom: 21px; }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #344054;
+            margin-bottom: 9px;
+        }
+
+        .input-wrap { position: relative; }
+
+        .input-wrap input {
+            width: 100%;
+            height: 51px;
+            border: 1px solid #dfe5ef;
+            border-radius: 11px;
+            outline: none;
+            padding: 0 45px 0 15px;
+            font-size: 14px;
+            background: #fbfcff;
+            color: #172033;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: #3977ff;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(57,119,255,0.11);
+        }
+
+        .input-wrap input::placeholder { color: #a0a9b9; }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b96aa;
+            font-size: 17px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 17px;
+            padding: 5px;
+            color: #69758a;
+        }
+
+        .options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 3px 0 25px;
+            font-size: 12px;
+            color: #657086;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .remember input {
+            accent-color: #155eef;
+            width: 15px;
+            height: 15px;
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 52px;
+            border: none;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(100deg, #155eef, #4938d1);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(21,94,239,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(21,94,239,0.28);
+        }
+
+        .login-button:active { transform: translateY(0); }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.error {
+            display: block;
+            color: #b42335;
+            background: #fff0f1;
+            border: 1px solid #ffd5da;
+        }
+
+        .security-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-top: 25px;
+            color: #8993a5;
+            font-size: 12px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #155eef;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 720px) {
+            .login-wrapper {
+                max-width: 460px;
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .welcome-panel { display: none; }
+
+            .form-panel { padding: 35px 26px; }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #155eef;
+                font-size: 22px;
+                font-weight: 800;
+                margin-bottom: 32px;
+            }
+
+            .mobile-brand span {
+                background: #edf3ff;
+                border-radius: 10px;
+                padding: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-wrapper">
+
+    <section class="welcome-panel">
+        <div class="brand">
+            <div class="brand-icon">🛍</div>
+            ShopEasy
+        </div>
+
+        <div class="welcome-content">
+            <span class="eyebrow">ADMINISTRATION PORTAL</span>
+            <h1>Manage your store.<br>Grow your business.</h1>
+            <p>
+                Welcome to your ShopEasy control center.
+                Manage products, monitor orders, and keep your store running smoothly.
+            </p>
+
+            <div class="feature">
+                <span class="feature-icon">📦</span>
+                <span>Product and inventory management</span>
+            </div>
+
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <span>Store operations and order management</span>
+            </div>
+        </div>
+
+        <div class="welcome-footer">
+            © 2026 ShopEasy · Admin Portal
+        </div>
+    </section>
+
+    <section class="form-panel">
+        <div class="mobile-brand"><span>🛍</span> ShopEasy</div>
+
+        <div class="admin-icon">👤</div>
+
+        <h2>Admin Login</h2>
+        <p class="subtitle">Enter your administrator credentials to continue.</p>
+
+        <div class="message" id="formMessage" role="alert"></div>
+
+        <form id="adminLoginForm" action="/admin" method="POST">
+            <div class="field">
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                        autofocus
+                    >
+                    <span class="input-icon">👤</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button
+                        class="password-toggle"
+                        type="button"
+                        id="togglePassword"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >👁</button>
+                </div>
+            </div>
+
+            <div class="options">
+                <label class="remember">
+                    <input type="checkbox" id="remember">
+                    Remember username
+                </label>
+                <span>Authorized access only</span>
+            </div>
+
+            <button type="submit" class="login-button" id="loginButton">
+                Sign In to Dashboard →
+            </button>
+        </form>
+
+        <div class="security-note">
+            🔒 Your admin session should be protected
+        </div>
+
+        <a href="/" class="back-link">← Back to ShopEasy Store</a>
+    </section>
+</div>
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const loginForm = document.getElementById("adminLoginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("formMessage");
+    const usernameInput = document.getElementById("username");
+    const rememberCheckbox = document.getElementById("remember");
+
+    togglePassword.addEventListener("click", function () {
+        const isHidden = passwordInput.type === "password";
+
+        passwordInput.type = isHidden ? "text" : "password";
+        togglePassword.textContent = isHidden ? "🙈" : "👁";
+        togglePassword.setAttribute("aria-pressed", String(isHidden));
+        togglePassword.setAttribute(
+            "aria-label",
+            isHidden ? "Hide password" : "Show password"
+        );
+    });
+
+    // Only the username is optionally remembered, never the password.
+    try {
+        const savedUsername = sessionStorage.getItem("shopeasy_admin_username");
+
+        if (savedUsername) {
+            usernameInput.value = savedUsername;
+            rememberCheckbox.checked = true;
+        }
+    } catch (error) {
+        // Storage may be unavailable; login still works.
+    }
+
+    loginForm.addEventListener("submit", function (event) {
+        message.className = "message";
+        message.textContent = "";
+
+        if (!usernameInput.value.trim() || !passwordInput.value) {
+            event.preventDefault();
+            message.className = "message error";
+            message.textContent = "Please enter both username and password.";
+            return;
+        }
+
+        try {
+            if (rememberCheckbox.checked) {
+                sessionStorage.setItem(
+                    "shopeasy_admin_username",
+                    usernameInput.value.trim()
+                );
+            } else {
+                sessionStorage.removeItem("shopeasy_admin_username");
+            }
+        } catch (error) {
+            // Storage is optional.
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Signing in...";
+    });
+</script>
+</body>
+</html>

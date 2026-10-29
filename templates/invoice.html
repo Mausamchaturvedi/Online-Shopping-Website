@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            padding:30px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:#2874f0;
+            color:white;
+        }
+
+        button{
+            padding:10px 20px;
+            background:green;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Invoice</h1>
+
+<h3>Order ID : {{ order_id }}</h3>
+
+<h3>Date : {{ order[1] }}</h3>
+
+<h3>Total Amount : ₹{{ order[0] }}</h3>
+
+<table>
+
+<tr>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Price</th>
+</tr>
+
+{% for item in items %}
+
+<tr>
+    <td>{{ item[0] }}</td>
+    <td>{{ item[1] }}</td>
+    <td>₹{{ item[2] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<button onclick="window.print()">
+    Print Invoice
+</button>
+
+</body>
+</html>
