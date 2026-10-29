@@ -1,7 +1,7 @@
 import os
 import unittest
 
-import certifi
+from pip._vendor import certifi
 
 
 class TestCertifi(unittest.TestCase):
